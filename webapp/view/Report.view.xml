@@ -1,0 +1,130 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.ui.layout.form"
+	xmlns:ci="com.sap.upl.StockReport.controller" controllerName="com.sap.upl.StockReport.controller.Report"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="{i18n>title}" id="page" busy="{settingsModel>/busy}" showHeader="false">
+		<content>
+			<Panel id="filledData" headerText="{i18n>criteria}" backgroundDesign="Translucent" expanded="{settingsModel>/formpanel}" expandable="true"
+				width="auto">
+				<content>
+					<f:SimpleForm editable="true" id="stockDetails" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="3" labelSpanS="12"
+						adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1"
+						singleContainerFullSize="false">
+						<f:content>
+							<Label text="{i18n>warehouseno}" design="Bold" required="true"/>
+							<!--<Input id="warehouseno" name="Whnumber" maxLength="3" required="true" value="{reportmodel>/Whnumber}" placeholder="{i18n>warehouseno}"
+								change="onChange"></Input>-->
+							<ComboBox items="{/WHHELPSet}" placeholder="{i18n>warehouseno}" name="Whnumber" id="warehouseno" change="onChange" required="true">
+								<core:Item key="{WHNUMBER}" text="{WHNUMBER}"/>
+							</ComboBox>
+							<Label text="{i18n>storagetype}" design="Bold"/>
+							<!--<Input id="storagetype" name="Storagetype" maxLength="3" value="{reportmodel>/Storagetype}" placeholder="{i18n>storagetype}"
+								change="onChange"></Input>-->
+							<Input name="Storagetype"  maxLength="3" id="storagetype" type="Text" textFormatMode="Key" showValueHelp="true"
+								placeholder="{i18n>storagetype}" valueHelpRequest="handleValueHelpRequest" suggestionItems="{path: '/STORAGETYPESet'}"
+								value="{reportmodel>/Storagetype}" change="onChange">
+								<suggestionItems>
+									<core:ListItem key="{TYPE}" text="{TYPE}"/>
+								</suggestionItems>
+							</Input>
+							<Label text="{i18n>itemCode}" design="Bold"/>
+							<Input id="itemcode" name="Material" maxLength="18" value="{reportmodel>/Material}" change="onChange" placeholder="{i18n>itemCode}"></Input>
+							<Label text="{i18n>bin}" design="Bold"/>
+							<!--<Input id="bin" name="Bin" maxLength="10" value="{reportmodel>/Bin}" change="onChange" placeholder="{i18n>bin}"></Input>-->
+							<Input name="Bin"  maxLength="10" id="bin" type="Text" textFormatMode="Key" showValueHelp="true" placeholder="{i18n>bin}"
+								valueHelpRequest="handleValueHelpRequest" suggestionItems="{path: '/BINHELPSet'}" value="{reportmodel>/Bin}" change="onChange">
+								<suggestionItems>
+									<core:ListItem key="{BIN}" text="{BIN}"/>
+								</suggestionItems>
+							</Input>
+							<Label text="{i18n>batch}" design="Bold"/>
+							<Input id="batch" name="Batch" maxLength="10" change="onChange" value="{reportmodel>/Batch}" placeholder="{i18n>batch}"></Input>
+							<Label text="{i18n>storageLoc}" design="Bold"/>
+							<!--<Input id="storageLoc" name="StorageLoc" maxLength="10" change="onChange" value="{reportmodel>/Storageloc}" placeholder="{i18n>storageLoc}"></Input>-->
+							<Input name="StorageLoc"  maxLength="10" id="storageLoc" type="Text" textFormatMode="Key" showValueHelp="true"
+								placeholder="{i18n>storageLoc}" valueHelpRequest="handleValueHelpRequest" suggestionItems="{path: '/STORAGELOCHELPSet'}"
+								value="{reportmodel>/Storageloc}" change="onChange">
+								<suggestionItems>
+									<core:ListItem key="{BIN}" text="{BIN}"/>
+								</suggestionItems>
+							</Input>
+						</f:content>
+					</f:SimpleForm>
+				</content>
+			</Panel>
+			<Panel id="reportdata" expandable="true" backgroundDesign="Solid" headerText="{i18n>stockReportDetails}" width="98%"
+				expanded="{settingsModel>/reportpanel}" height="100%">
+				<content>
+					<!--	<ScrollContainer height="100%" vertical="true" horizontal="false">-->
+					<Table sticky="HeaderToolbar,InfoToolbar,ColumnHeaders" growing="true" growingThreshold="500" growingScrollToLoad="true"
+						class="sapUiResponsiveMargin" inset="false" alternateRowColors="true" items="{reportlist>/results}">
+						<headerToolbar>
+							<OverflowToolbar>
+								<Title text="{i18n>items}" level="H2" id="tableItem"/>
+								<ToolbarSpacer/>
+								<!--<Button icon="sap-icon://add" type="Emphasized" press="addLineItem"/>-->
+							</OverflowToolbar>
+						</headerToolbar>
+						<columns>
+							<Column demandPopin="true">
+								<Label design="Bold" textAlign="Left" text="{i18n>itemCode}"/>
+							</Column>
+							<Column demandPopin="true">
+								<Label design="Bold" textAlign="Left" text="{i18n>itemDesc}"/>
+							</Column>
+							<Column demandPopin="true" hAlign="Center">
+								<Label design="Bold" textAlign="Center" text="{i18n>plant}"/>
+							</Column>
+							<Column demandPopin="true" minScreenWidth="Desktop">
+								<Label design="Bold" textAlign="Left" text="{i18n>storageloc}"/>
+							</Column>
+							<Column demandPopin="true" minScreenWidth="Desktop">
+								<Label design="Bold" textAlign="Left" text="{i18n>stockcategory}"/>
+							</Column>
+							<Column demandPopin="true" minScreenWidth="Desktop" hAlign="Center">
+								<Label design="Bold" textAlign="Center" text="{i18n>batch}"/>
+							</Column>
+							<Column demandPopin="true" minScreenWidth="Desktop">
+								<Label design="Bold" textAlign="Right" text="{i18n>storagetype}"/>
+							</Column>
+							<Column demandPopin="true" minScreenWidth="Desktop" hAlign="Center">
+								<Label design="Bold" textAlign="Center" text="{i18n>bin}"/>
+							</Column>
+							<Column demandPopin="true" minScreenWidth="Desktop">
+								<Label design="Bold" textAlign="Left" text="{i18n>availablestock}"/>
+							</Column>
+							<!--<Column demandPopin="true" minScreenWidth="Desktop">
+								<Label design="Bold" textAlign="Left" text="{i18n>unit}"/>
+							</Column>-->
+						</columns>
+						<items>
+							<ColumnListItem >
+								<cells>
+									<Text text="{reportlist>Material}"/>
+									<Text text="{reportlist>Materialdes}"/>
+									<Text text="{reportlist>Plant}"/>
+									<Text text="{reportlist>Storageloc}"/>
+									<Text text="{reportlist>Stockcategory}"/>
+									<Text text="{reportlist>Batch}"/>
+									<Text text="{reportlist>Storagetype}"/>
+									<Text text="{reportlist>Bin}"/>
+									<!--<Text text="{reportlist>Availablestock}"/>
+									<Text text="{reportlist>Baseunit}"/>-->
+									<ObjectNumber class="sapUiSmallMarginBottom"
+										number="{ parts:[{path:'reportlist>Availablestock'},{path:'reportlist>Baseunit'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }"
+										unit="{reportlist>Baseunit}" state="{path:'reportlist>Availablestock', formatter:'.formatter.setStatus'}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+					<!--	</ScrollContainer>-->
+				</content>
+			</Panel>
+		</content>
+		<footer>
+			<OverflowToolbar>
+				<ToolbarSpacer/>
+				<Button text="{i18n>execute}" tooltip="{i18n>execute}" press="onExecute" icon="sap-icon://accept" type="Emphasized"/>
+			</OverflowToolbar>
+		</footer>
+	</Page>
+</mvc:View>
